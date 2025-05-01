@@ -2,16 +2,11 @@ package com.thorben.janssen.repository;
 
 import java.util.List;
 
-import jakarta.data.repository.BasicRepository;
-import jakarta.data.repository.Repository;
-import org.hibernate.annotations.processing.Find;
+import jakarta.data.repository.*;
 
 import com.thorben.janssen.model.ChessGame;
 
-import jakarta.data.repository.CrudRepository;
-import jakarta.data.repository.Query;
-
-//@Repository
+@Repository
 public interface ChessGameRepositoryCrud
 //            extends BasicRepository<ChessGame, Long> {
         extends CrudRepository<ChessGame, Long> {

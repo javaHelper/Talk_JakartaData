@@ -5,8 +5,7 @@ import java.util.List;
 import com.thorben.janssen.model.ChessMove;
 import com.thorben.janssen.model._ChessGame;
 import com.thorben.janssen.model._ChessMove;
-import com.thorben.janssen.repository.ChessMoveRepository;
-import com.thorben.janssen.repository.ChessMoveRepository_;
+import com.thorben.janssen.repository.*;
 import jakarta.data.Limit;
 import jakarta.data.Sort;
 import jakarta.data.page.Page;
@@ -20,8 +19,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import com.thorben.janssen.model.ChessGame;
-import com.thorben.janssen.repository.ChessGameRepositoryCustom;
-import com.thorben.janssen.repository.ChessGameRepositoryCustom_;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
@@ -33,13 +30,25 @@ public class TestHibernate {
 
 	private EntityManagerFactory emf;
 	private ChessGameRepositoryCustom chessGameCustomRepo;
+	private ChessGameRepositoryCrud chessGameCrudRepo;
 	private ChessMoveRepository chessMoveRepo;
 
 	private Long gameId;
 
 	private StatelessSession statelessSession;
 
-	
+
+	@Test
+	public void persistCrudRepo() {
+		log.info("... persistCrudRepo ...");
+
+		ChessGame game = new ChessGame();
+		game.setPlayerWhite("Thorben Janssen");
+		game.setPlayerBlack("Another Player");
+
+		chessGameCrudRepo.insert(game);
+	}
+
 	@Test
 	public void persistCustomRepo() {
 		log.info("... persistCustomRepo ...");
@@ -244,7 +253,7 @@ public class TestHibernate {
 		statelessSession.beginTransaction();
 
 		chessGameCustomRepo = new ChessGameRepositoryCustom_(statelessSession);
-//		chessGameCrudRepo = new ChessGameRepositoryCrud_(statelessSession);
+		chessGameCrudRepo = new ChessGameRepositoryCrud_(statelessSession);
 		chessMoveRepo = new ChessMoveRepository_(statelessSession);
 
 		gameId = prepareTestData();
