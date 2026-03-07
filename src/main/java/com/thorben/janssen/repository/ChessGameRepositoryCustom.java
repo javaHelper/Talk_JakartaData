@@ -2,14 +2,17 @@ package com.thorben.janssen.repository;
 
 import java.util.List;
 
+import com.thorben.janssen.model.ChessGameRecord;
 import com.thorben.janssen.model._ChessGame;
 import jakarta.data.Sort;
+import jakarta.data.constraint.Like;
 import jakarta.data.page.CursoredPage;
 import jakarta.data.page.Page;
 import jakarta.data.page.PageRequest;
 import jakarta.data.repository.*;
 
 import com.thorben.janssen.model.ChessGame;
+import jakarta.data.restrict.Restriction;
 import org.hibernate.StatelessSession;
 
 @Repository
@@ -33,7 +36,7 @@ public interface ChessGameRepositoryCustom {
     @Delete
     void delete(@By(_ChessGame.ID) Long gameId, int version);
 
-    @Query("UPDATE ChessGame g SET g.playerBlack = :playerBlack, version = :version+1 WHERE g.id = :id AND version = :version")
+    @Query("UPDATE ChessGame g SET g.playerBlack = :playerBlack, g.version = :version+1 WHERE g.id = :id AND g.version = :version")
     void updatePlayerBlack(Long id, String playerBlack, int version);
 
     @Query("SELECT g FROM ChessGame g WHERE g.playerWhite = :player OR g.playerBlack = :player")
@@ -55,4 +58,18 @@ public interface ChessGameRepositoryCustom {
 
 //    @Query("SELECT g FROM ChessGame g WHERE g.playerWhite = :player OR g.playerBlack = :player")
 //    Page<ChessGame> findGamesByPlayersPaged(String player, PageRequest<ChessGame> pageRequest);
+
+    // Record projection
+//    @Find(ChessGame.class)
+    @Query("SELECT g.round, g.playerWhite, g.playerBlack FROM ChessGame g WHERE g.id = :id")
+    ChessGameRecord findById(Long id);
+
+    // Fluent Restriction API
+//    ChessGame findAll(Restriction<ChessGame> restriction);
+
+    // Constraints
+    @Find
+    ChessGame findByPlayerName(@Is(Like.class) String playerWhite);
+//    @Find
+//    ChessGame findByPlayerName(Like playerWhite);
 }

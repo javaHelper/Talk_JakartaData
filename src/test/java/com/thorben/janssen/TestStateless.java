@@ -2,14 +2,13 @@ package com.thorben.janssen;
 
 import java.util.List;
 
-import com.thorben.janssen.model.ChessMove;
-import com.thorben.janssen.model._ChessGame;
-import com.thorben.janssen.model._ChessMove;
+import com.thorben.janssen.model.*;
 import com.thorben.janssen.repository.*;
 import jakarta.data.Limit;
 import jakarta.data.Sort;
-import jakarta.data.page.Page;
-import jakarta.data.page.PageRequest;
+import jakarta.data.constraint.Like;
+import jakarta.data.restrict.Restrict;
+import jakarta.data.restrict.Restriction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.hibernate.SessionFactory;
@@ -18,13 +17,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.thorben.janssen.model.ChessGame;
-
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
 import jakarta.persistence.Persistence;
 
-public class TestHibernate {
+public class TestStateless {
 
 	Logger log = LogManager.getLogger(this.getClass().getName());
 
@@ -225,8 +222,36 @@ public class TestHibernate {
 //		games.forEach(g -> log.info(g.getPlayerWhite() + " - " + g.getPlayerBlack()));
 //	}
 
+//    @Test
+//    public void fluentRestrictions() {
+//        log.info("... fluentRestrictions ...");
+//
+//        // Find game
+//        ChessGame game = chessGameCustomRepo.findAll(
+//                Restrict.all(
+//                        _ChessGame.playerWhite.contains("Thorben"),
+//                        _ChessGame.playerBlack.contains("player")));
+//    }
+
+    @Test
+    public void recordProjection() {
+        log.info("... recordProjection ...");
+
+        // Find ChessGameRecord
+        ChessGameRecord game = chessGameCustomRepo.findById(1L);
+        log.info(game);
+    }
 
 
+//    @Test
+//    public void constraints() {
+//        log.info("... constraints ...");
+//
+//        // Find game
+//        ChessGame game = chessGameCustomRepo.findByPlayerName("Thorben%");
+////        ChessGame game = chessGameCustomRepo.findByPlayerName(Like.prefix("Thorben"));
+//        log.info(game);
+//    }
 
 	private Long prepareTestData() {
 		EntityManager em = emf.createEntityManager();
